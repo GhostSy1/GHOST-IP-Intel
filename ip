@@ -1,4 +1,1 @@
-# Add authorized IPv4 targets here, one per line.
-# Do not commit live event targets to a public repository.
-# Example: 127.0.0.1
-
+159.26.100.226

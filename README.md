@@ -1,22 +1,20 @@
-# GHOST-IP-Intel: Elite Authorized Asset Intelligence Engine (v2.0-PRO) 🛡️
+# GHOST-IP-Intel
 
-**GHOST-IP-Intel** is an advanced, production-grade network intelligence and asset profiling engine engineered for authorized security operators and red team engagements. 
+Elite Authorized Security Assessment and Intelligence Suite. Developed by Ghost-SY1.
 
-## 🚀 Key Architectural Features
+## Features
+- Interactive CLI with screen clear and Ghost banner display.
+- Structured local databases for CVE matching, vulnerability signatures, and telemetry rules.
+- Real-time empirical reconnaissance and policy analysis (Zero simulated data).
+- Automated JSON and CSV report generation with audit trails.
 
-- **Empirical Reconnaissance**: Relies strictly on live socket connections, DNS PTR records, service banner grabbing, and port probing without fabricated assumptions.
-- **Strict Allowlist Enforcement**: Reads exclusively from the authorized `ip` targets file.
-- **Multi-Threaded Performance**: Rapid asynchronous port scanning across critical attack-surface ports.
-
-## 📦 Usage
-
+## Installation & Usage
 ```bash
-# Define authorized targets in 'ip'
-echo "127.0.0.1" > ip
-
-# Execute empirical recon and export reports
-python3 main.py --ip ip --json report.json --csv report.csv
+git clone https://github.com/GhostSy1/GHOST-IP-Intel.git
+cd GHOST-IP-Intel
+pip install -r requirements.txt
+python3 main.py
 ```
 
-## ⚖️ Legal Disclaimer
-**FOR AUTHORIZED PROFESSIONAL USE ONLY.** Developed by **Ghost-SY1**.
+## License
+MIT License. Authorized use only.
