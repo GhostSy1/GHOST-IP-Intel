@@ -1,74 +1,54 @@
 # GHOST-IP-Intel
 
-[![Python Version](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-blue)]()
+[![Go](https://img.shields.io/badge/Go-1.21%2B-blue)]()
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-> **Professional Authorized Security Assessment & Offensive Operations Suite**  
-> Developed by Ghost-SY1.
+> **Authorized Asset & Network Intelligence Engine**  
+> Developed by Abdulaziz (Ghost-SY1).
 
 ---
 
 ## Table of Contents
-1. [Overview](#overview)
-2. [Key Capabilities](#key-capabilities)
-3. [Repository Structure](#repository-structure)
-4. [Installation](#installation)
-5. [Operational Usage](#operational-usage)
-6. [Audit Reports](#audit-reports)
+1. [Overview & Purpose](#overview--purpose)
+2. [Architecture & Components](#architecture--components)
+3. [Directory Structure](#directory-structure)
+4. [Installation & Prerequisites](#installation--prerequisites)
+5. [Usage Guide & CLI Reference](#usage-guide--cli-reference)
+6. [Integrity & Provenance](#integrity--provenance)
 7. [License](#license)
 
 ---
 
-## Overview
-**GHOST-IP-Intel** is engineered to provide deep empirical reconnaissance, asset discovery, and security posture validation for authorized red team engagements. Designed for high-performance execution via command-line interface, it eliminates speculative outputs and relies entirely on empirical socket handshakes, protocol banners, and structured signature databases.
+## Overview & Purpose
+**GHOST-IP-Intel** is a high-performance network reconnaissance and asset intelligence tool engineered for authorized security operations. It reads target assets from a local file, validates reachability, performs concurrent port probing, and calculates cryptographic SHA-256 fingerprints to ensure data integrity.
 
 ---
 
-## Key Capabilities
-- **Automated Banner & Interface Initialization**: Instantly clears terminal buffer, displays the authorized Ghost-SY1 operational banner, and accepts live target input.
-- **Empirical Reconnaissance Engine**: Executes direct protocol probing and signature matching against structured local databases.
-- **Standardized Audit Trails**: Automatically exports machine-readable assessment reports in JSON and CSV formats.
+## Architecture & Components
+- **Python CLI Orchestrator (`main.py`)**: Manages user interaction, screen clearing, and official `Ghost-SY1` banner initialization.
+- **Go Prober (`core/prober.go`)**: High-speed concurrent TCP connection testing.
 
 ---
 
-## Repository Structure
-```text
+## Directory Structure
+```
 GHOST-IP-Intel/
-├── src/                  # Core engine modules
-├── db/                   # Vulnerability signatures & intelligence DB
-├── docs/                 # Detailed architecture & operational manuals
-├── tests/                # Unit and integration test suites
-├── reports/              # Exported audit output directory
-├── main.py               # Primary CLI execution entry point
-├── requirements.txt      # Python dependencies
-└── README.md             # Project documentation
+├── main.py
+├── core/
+│   └── prober.go
+├── ip
+├── report.json
+├── report.csv
+└── README.md
 ```
 
 ---
 
-## Installation
-Clone the repository and install the required dependencies:
+## Installation & Usage
 ```bash
 git clone https://github.com/GhostSy1/GHOST-IP-Intel.git
 cd GHOST-IP-Intel
-pip install -r requirements.txt
+echo "159.26.100.226" > ip
+python3 main.py --ip ip --json report.json --csv report.csv
 ```
-
----
-
-## Operational Usage
-Execute the tool directly from the terminal:
-```bash
-python3 main.py
-```
-Upon execution, the terminal will prompt for the target IP, hostname, or configuration path, executing the assessment sequence and writing structured reports to disk.
-
----
-
-## Audit Reports
-Generated reports include precise timestamps, target parameters, verified signatures, and operational status logs saved under `reports/` and root output files (`report.json`).
-
----
-
-## License
-Distributed under the MIT License. See `LICENSE` for more information.
