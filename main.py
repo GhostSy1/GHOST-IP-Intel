@@ -11,7 +11,7 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 
-VERSION = "GHOST-IP-Intel v2.2-PRO (Strict Anti-Proxy Engine)"
+VERSION = "GHOST-IP-Intel v2.3-PRO (Balanced Precision Engine)"
 
 BANNER = f"""
 [bold cyan] ██████╗ ██╗  ██╗ ██████╗ ███████╗████████╗     ██╗███╗   ██╗████████╗███████╗██╗     [/bold cyan]
@@ -73,66 +73,58 @@ def query_dns(target_ip):
 
 def probe_service(target_ip, port):
     """
-    Strict Anti-Proxy probe:
-    Does not trust socket.connect_ex alone (which can be faked by firewall SYN proxies).
-    Requires actual application-layer verification (banner reception or HTTP response).
+    Balanced Precision probe:
+    1. Verifies TCP connectivity.
+    2. Attempts application-layer banner grab or lightweight handshake.
+    3. Keeps valid open ports visible with precise status (Live Banner vs TCP Reachable).
     """
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.settimeout(1.5)
+        s.settimeout(1.2)
         res = s.connect_ex((target_ip, port))
         if res != 0:
             s.close()
             return None, None
 
-        # Connected at TCP level. Now verify application layer responsiveness to filter SYN proxies.
-        banner = None
+        status = "TCP Reachable (Open)"
         
-        # 1. Try receiving initial banner (FTP, SSH, SMTP, etc.)
+        # Try receiving banner immediately
         try:
-            s.settimeout(1.5)
+            s.settimeout(1.0)
             data = s.recv(1024)
             if data:
                 decoded = data.decode('utf-8', errors='ignore').strip()
                 if decoded:
-                    banner = f"Live Banner: {decoded.replace(chr(10), ' ').replace(chr(13), ' ')}"
-        except socket.timeout:
-            pass
+                    status = f"Live Banner: {decoded.replace(chr(10), ' ').replace(chr(13), ' ')}"
         except:
             pass
 
-        # 2. If no initial banner and it's a web/secure port, send a test HTTP request to verify actual service
-        if not banner and port in [80, 443, 8080, 8443]:
+        # If no banner, test basic HTTP/HTTPS handshake on web ports
+        if status == "TCP Reachable (Open)" and port in [80, 443, 8080, 8443]:
             try:
                 if port in [443, 8443]:
                     context = ssl.create_default_context()
                     context.check_hostname = False
                     context.verify_mode = ssl.CERT_NONE
                     ss = context.wrap_socket(s, server_hostname=target_ip)
-                    ss.settimeout(2.0)
+                    ss.settimeout(1.5)
                     ss.sendall(b"HEAD / HTTP/1.0\r\nHost: target\r\n\r\n")
-                    resp = ss.recv(512)
+                    resp = ss.recv(256)
                     ss.close()
                     if resp:
-                        banner = "Verified HTTPS Web Service"
+                        status = "Verified HTTPS Web Service"
                 else:
-                    s.settimeout(2.0)
+                    s.settimeout(1.5)
                     s.sendall(b"HEAD / HTTP/1.0\r\nHost: target\r\n\r\n")
-                    resp = s.recv(512)
+                    resp = s.recv(256)
                     s.close()
                     if resp:
-                        banner = "Verified HTTP Web Service"
+                        status = "Verified HTTP Web Service"
             except:
                 pass
 
         s.close()
-        
-        # If socket connected but absolutely NO application response / banner / data was exchanged,
-        # it is likely a firewall SYN proxy trap. Discard it as filtered/closed.
-        if not banner:
-            return None, None
-            
-        return port, banner
+        return port, status
     except:
         pass
     return None, None
@@ -145,7 +137,7 @@ def asset_recon(target_ip):
         "reverse_dns": "Unknown",
         "open_ports": [],
         "port_banners": {},
-        "note": "Strict application-layer verification. Firewall SYN proxies filtered."
+        "note": "Empirical TCP reachability with application verification."
     }
     
     ptr, _ = query_dns(target_ip)
@@ -181,7 +173,7 @@ def save_reports(results, json_out, csv_out):
         console.print(f"[bold green][+] CSV Report saved to: {csv_out}[/bold green]")
 
 def main():
-    parser = argparse.ArgumentParser(description="GHOST-IP-Intel v2.2-PRO")
+    parser = argparse.ArgumentParser(description="GHOST-IP-Intel v2.3-PRO")
     parser.add_argument("--ip", default="ip", help="Path to authorized targets file (default: ip)")
     parser.add_argument("--target", help="Optional single target override")
     parser.add_argument("--json", help="Export to JSON")
@@ -207,7 +199,7 @@ def main():
             console.print(f"[bold red][!] Invalid IPv4: {t_ip}[/bold red]")
             continue
             
-        console.print(f"\n[bold yellow][*] Probing target: {t_ip} (Strict Anti-Proxy Mode)...[/bold yellow]")
+        console.print(f"\n[bold yellow][*] Probing target: {t_ip}...[/bold yellow]")
         res = asset_recon(t_ip)
         results.append(res)
         
@@ -216,13 +208,13 @@ def main():
         table.add_column("Observation", style="white")
         table.add_row("Target IP", res["ip"])
         table.add_row("Reverse DNS", res["reverse_dns"])
-        table.add_row("Open Ports", ", ".join(map(str, res["open_ports"])) if res["open_ports"] else "None (All filtered or SYN-proxy dropped)")
+        table.add_row("Open Ports", ", ".join(map(str, res["open_ports"])) if res["open_ports"] else "None")
         for port, banner in res["port_banners"].items():
             table.add_row(f"Port {port}", banner)
         console.print(table)
 
     save_reports(results, args.json, args.csv)
-    console.print("\n[bold green][+] Done. Zero fake ports displayed.[/bold green]")
+    console.print("\n[bold green][+] Done. Balanced precision achieved.[/bold green]")
 
 if __name__ == "__main__":
     main()
