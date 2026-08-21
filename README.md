@@ -1,120 +1,35 @@
 # GHOST-IP-Intel
 
-[![Python](https://img.shields.io/badge/Python-3.10%2B-blue)]()
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+Professional security assessment and artifact analysis utility. Developed by Abdulaziz (Ghost-SY1).
 
-> **Authorized Professional Security Platform by Ghost-SY1**  
-> Developed by Abdulaziz.
+## Overview
 
----
+`GHOST-IP-Intel` is an advanced, production-grade security utility built under the Ghost-SY1 v4.0-PRO standard. It parses local artifacts, calculates SHA-256 integrity hashes, evaluates security indicators, and generates structured JSON, CSV, SARIF 2.1.0, and executive PDF reports without live exploitation or network execution.
 
-## Table of Contents
-1. [Overview & Purpose](#overview--purpose)
-2. [Problem Solved](#problem-solved)
-3. [Architecture & Core Modules](#architecture--core-modules)
-4. [Installation & Prerequisites](#installation--prerequisites)
-5. [Usage Guide & CLI Reference](#usage-guide--cli-reference)
-6. [Input & Output Formats](#input--output-formats)
-7. [Integration & API Contracts](#integration--api-contracts)
-8. [Security, Ethics & Authorized Scope](#security-ethics--authorized-scope)
-9. [Troubleshooting & FAQ](#troubleshooting--faq)
-10. [License](#license)
+## Features
 
----
+- **Strict Zero-Simulation Engine**: Operates exclusively on real local operator-provided inputs.
+- **Cryptographic Provenance**: Every inspected artifact is bound to a SHA-256 integrity digest.
+- **Multi-Format Reporting**: Native export to JSON, CSV, SARIF 2.1.0, and ReportLab PDF.
+- **Interactive CLI & Banner**: Instant terminal screen clear, Ghost-SY1 banner initialization, and non-interactive CI support.
 
-## Overview & Purpose
-**GHOST-IP-Intel** is an advanced, production-grade cybersecurity tool developed under the **Ghost-SY1** framework. It is designed to perform rigorous security evaluation, automated auditing, or asset intelligence for enterprise environments under strict operational authorizations.
-
----
-
-## Problem Solved
-Security teams and penetration testers frequently deal with fragmented tooling, inconsistent output schemas, and lack of reproducible evidence chains. **GHOST-IP-Intel** standardizes execution flow, clears terminal buffers, presents verified cryptographic telemetry, and enforces non-repudiation.
-
----
-
-## Architecture & Core Modules
-- **Interactive CLI Orchestrator (`main.py`)**: Handles argument parsing, screen cleaning, and official  banner initialization.
-- **Engine Layer**: Executes domain-specific logic, risk scoring, or payload verification.
-- **Evidentiary Vault**: Stores tamper-evident records authenticated via SHA-256 fingerprinting.
-
----
-
-## Installation & Prerequisites
-Ensure Python 3.10+ is installed on your workstation or operational node (Kali Linux / Linux / Windows PowerShell):
+## Installation & Setup
 
 ```bash
 git clone https://github.com/GhostSy1/GHOST-IP-Intel.git
 cd GHOST-IP-Intel
-pip install -r requirements.txt
-```
-
----
-
-## Usage Guide & CLI Reference
-Run the tool interactively or via command-line flags:
-
-```bash
 python3 main.py --help
-python3 main.py --target <target_or_file>
 ```
 
----
-
-## Input & Output Formats
-- **Inputs**: Text files, JSON assessment reports, target lists, or configuration drops.
-- **Outputs**: Structured JSON intelligence reports, CSV summaries, and tamper-evident audit ledger entries.
-
----
-
-## Integration & API Contracts
-**GHOST-IP-Intel** integrates natively with **GHOST-Evidence-Fabric** and **GHOST-Vault** through standard JSON/CSV schema validation and SHA-256 chain verification.
-
----
-
-## Security, Ethics & Authorized Scope
-> **Warning**: This tool is strictly intended for authorized security testing, vulnerability research, and educational evaluations within isolated lab environments or with explicit written consent from target asset owners.
-
----
-
-## Troubleshooting & FAQ
-- **ModuleNotFoundError**: Ensure dependencies are installed via `pip install -r requirements.txt`.
-- **Permission Denied**: Run with appropriate execution privileges or verify file access permissions.
-
----
-
-## License
-Distributed under the MIT License. See `LICENSE` for more information.
-
-## Engineering and release baseline
-
-This repository is maintained as part of the Ghost-SY1 security engineering portfolio. The project is intended for authorized assessment, analysis, or defensive engineering, according to the concrete behavior implemented in the source tree. Results must be derived from operator-supplied inputs and should be reviewed against the documented limitations before they are used in a decision.
-
-### Repository map
-
-| Path | Purpose |
-|---|---|
-| `README.md` | Installation, usage, scope, and limitations |
-| `docs/` | Detailed operational and architectural documentation |
-| `tests/` | Reproducible checks for implemented behavior |
-| `.github/workflows/` | Automated quality and release checks |
-| `SECURITY.md` | Vulnerability reporting and release hygiene |
-| `CONTRIBUTING.md` | Contribution and review requirements |
-
-### Verification
-
-Run the repository-specific command documented above, then run the checks in `.github/workflows/quality.yml` locally where the required runtime is available. Do not interpret a passing syntax check as proof that every deployment or security decision is correct.
-
-### Responsible use
-
-Use only with explicit authorization. Do not commit credentials, private keys, customer data, or raw engagement artifacts. The repository does not provide a guarantee that an observation is a vulnerability; analysts must preserve evidence and validate conclusions independently.
-
-## Domain extension
-
-This repository includes `tools/ghost_extension.py`, a standalone local-input analyzer for the repository domain. It hashes every inspected file, records the source location for each observable indicator, and emits JSON with optional CSV and SARIF output. It does not execute supplied content, make network requests, or invoke external security utilities.
+## Usage Example
 
 ```bash
-python3 tools/ghost_extension.py --input ./evidence --output report.json --sarif report.sarif
+python3 main.py --input ./target/ --output report.json --sarif report.sarif --pdf report.pdf
 ```
 
-The extension is an evidence triage aid. A marker is not a confirmed vulnerability; validate it against the authorized environment and the repository's documented limitations.
+## Documentation
 
+- Architecture: `docs/architecture.md`
+- CLI Reference: `docs/cli-reference.md`
+- Security Policy: `SECURITY.md`
+- Contributing: `CONTRIBUTING.md`
